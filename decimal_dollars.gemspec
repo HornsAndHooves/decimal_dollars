@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = DecimalDollars::VERSION
   spec.authors       = ["Roman Trofimov"]
   spec.email         = ["trofimov.roman@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = "Money representation that uses decimal math."
+  spec.description   = spec.summary
+  spec.homepage      = "https://github.com/HornsAndHooves/decimal_dollars"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
