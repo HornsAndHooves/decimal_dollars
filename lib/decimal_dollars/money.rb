@@ -9,8 +9,7 @@ module DecimalDollars
     # @param [Object] value
     # return [DecimalDollars::Money]
     def initialize(value)
-      value = round_float(value) if value.is_a?(Float)
-      super(value)
+      super(round_float(value.to_f))
     end
 
     # Define standard operators to return Money objects.
