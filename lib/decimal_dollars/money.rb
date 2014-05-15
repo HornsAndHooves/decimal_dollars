@@ -1,52 +1,47 @@
 require "bigdecimal"
-require "delegate"
+require "bigdecimal/util"
+
+require "decimal_dollars/money/arithmetic"
 
 module DecimalDollars
   # The Money class is designed to handle the money representation of a value.
   # For the most part, it acts like a BigDecimal.
-  class Money < DelegateClass ::BigDecimal
+  class Money
+    include DecimalDollars::Money::Arithmetic
+
     # Create new Money instance
-    # @param [Object] value
-    # return [DecimalDollars::Money]
-    def initialize(value)
-      super(round_float(value.to_f))
-    end
-
-    # Define standard operators to return Money objects.
-    %w(+ -).each do |method|
-      define_method method do |value|
-        Money.new(super(Money.new(value)))
-      end
-    end
-
-    # Divide a Money object by another object.
-    # @param [Object] value
+    # @param [Object] obj
     # @return [DecimalDollars::Money]
-    def /(value)
-      Money.new(super(value))
+    def initialize(obj)
+      @decimal = if obj.respond_to?(:to_d)
+                   obj.to_d
+                 else
+                   BigDecimal(obj.to_s)
+                 end
     end
 
-    # Multiply a Money object by a scalar.
-    # @param [Object] value
-    # @raise DecimalDollars::Money::InvalidValue if a Money object is passed.
-    def *(value)
-      raise ArgumentError, 'Money cannot be multiplied by Money' if value.is_a?(Money)
-      Money.new(super(value))
+    # Make Money instance handle the operations when arguments order is reversed.
+    # @return [Array]
+    def coerce(value)
+      [self, value]
     end
 
-    # Stub original ** method.
-    # @param [Object] power
-    # @raise DecimalDollars::Money::InvalidValue as
-    def **(power)
-      raise RuntimeError, 'Money cannot be raised to any power'
+    # Return decimal representation.
+    # @return [BigDecimal]
+    def to_d
+      @decimal
     end
 
-    # Round the passed float value using the most basic rounding method.
-    # @param [Float] value
+    # Return float representation.
     # @return [Float]
-    def round_float(value)
-      (value * 100).round / 100.0
+    def to_f
+      @decimal.to_f
     end
-    private :round_float
+
+    # Return string representation.
+    # @return [String]
+    def to_s
+      @decimal.to_s
+    end
   end
 end

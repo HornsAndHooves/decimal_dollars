@@ -1,5 +1,5 @@
-require __dir__ << "/decimal_dollars/money"
-require __dir__ << "/decimal_dollars/version"
+require "decimal_dollars/money"
+require "decimal_dollars/version"
 
 # :undoc
 module DecimalDollars

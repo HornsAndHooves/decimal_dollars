@@ -6,3 +6,7 @@ gemspec
 group :test do
   gem 'simplecov'
 end
+
+group :development, :test do
+  gem 'pry'
+end

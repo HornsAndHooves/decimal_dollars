@@ -1,54 +1,43 @@
 require "spec_helper"
 
 describe DecimalDollars::Money do
-  let(:money) { described_class.new(1.2345) }
+  subject { DecimalDollars::Money }
 
-  describe "#+" do
-    it "adds a value and return Money object" do
-      expect(money + 1.01).to be_an_instance_of(described_class)
+  let(:money) { subject.new(1.2345) }
+
+  it "uses to_d for passed object if it responds to it" do
+    obj = "1.2345"
+    expect(obj).to receive(:to_d)
+    subject.new(obj)
+  end
+
+  it "creates new BigDecimal if passed object doesn't respond to to_d" do
+    obj = double("1.2345", to_s: "1.2345")
+    expect(obj).to receive(:to_s)
+    subject.new(obj)
+  end
+
+  describe "#corece" do
+    it "returns array with reversed operands" do
+      expect(money.coerce(2)).to eq([money, 2])
     end
   end
 
-  describe "#-" do
-    it "subtracts a value and return Money object" do
-      expect(money - 1.01).to be_an_instance_of(described_class)
+  describe "#to_d" do
+    it "returns BigDecimal representation" do
+      expect(money.to_d).to eq(BigDecimal('1.2345'))
     end
   end
 
-  describe "#*" do
-    it "is multipliable by a value and returns Money object" do
-      expect(money * 1.01).to be_an_instance_of(described_class)
-    end
-
-    it "raises an ArgumentError if a Money object is passed" do
-      expect {
-        money * described_class.new(2)
-      }.to raise_error(ArgumentError, 'Money cannot be multiplied by Money')
+  describe "#to_f" do
+    it "returns Float representation" do
+      expect(money.to_f).to eq(BigDecimal('1.2345').to_f)
     end
   end
 
-  describe "#/" do
-    it "is divisible by a value and return Money object" do
-      expect(money / 1.01).to be_an_instance_of(described_class)
-    end
-  end
-
-  describe "#**" do
-    it "raises a RuntimeError" do
-      expect {
-        money ** 2
-      }.to raise_error(RuntimeError, 'Money cannot be raised to any power')
-    end
-  end
-
-  describe "#round_float" do
-    it "rounds correctly" do
-      expect(described_class.new(1.251).to_f).to  eq(1.25)
-      expect(described_class.new(1.255).to_f).to  eq(1.25)
-      expect(described_class.new(1.2551).to_f).to eq(1.26)
-      expect(described_class.new(1.2555).to_f).to eq(1.26)
-      expect(described_class.new(1.2556).to_f).to eq(1.26)
-      expect(described_class.new(1.256).to_f).to  eq(1.26)
+  describe "#to_s" do
+    it "returns String representation" do
+      expect(money.to_s).to eq(BigDecimal('1.2345').to_s)
     end
   end
 end

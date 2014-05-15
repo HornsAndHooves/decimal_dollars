@@ -1,6 +1,6 @@
 # DecimalDollars
 
-TODO: Write a gem description
+Money representation that uses decimal math.
 
 ## Installation
 
@@ -19,6 +19,14 @@ Or install it yourself as:
 ## Usage
 
 TODO: Write usage instructions here
+
+## To test locally
+
+    $ rake build
+    $ rake install
+    $ irb
+
+    > require 'decimal_dollars'
 
 ## Contributing
 
